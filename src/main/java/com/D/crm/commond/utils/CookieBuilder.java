@@ -1,8 +1,10 @@
 package com.D.crm.commond.utils;
 
+import com.D.crm.commond.contants.Constants;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -41,6 +43,18 @@ public class CookieBuilder {
             value = encode(value);
         }
         return new CookieBuilder(key, value);
+    }
+
+    /**
+     * 从 response 中移除 Cookie
+     *
+     * @param response 响应对象
+     * @param key cookie 的键
+     */
+    public static void removeCookie(HttpServletResponse response, String key) {
+        response.addCookie(CookieBuilder.createCookie(key, "1", false)
+                                .setMaxAge(0)
+                                .getCookie());
     }
 
     private static String encode(String str) {

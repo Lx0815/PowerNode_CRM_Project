@@ -81,15 +81,8 @@ public class UserController {
                 response.addCookie(actCookie);
                 response.addCookie(pwdCookie);
             } else {
-                Cookie actCookie = CookieBuilder.createCookie(Constants.LOGIN_ACT, "1", true)
-                        .setMaxAge(0)
-                        .getCookie();
-                Cookie pwdCookie = CookieBuilder.createCookie(Constants.LOGIN_PWD, "1", true)
-                        .setMaxAge(0)
-                        .getCookie();
-
-                response.addCookie(actCookie);
-                response.addCookie(pwdCookie);
+                CookieBuilder.removeCookie(response, Constants.LOGIN_ACT);
+                CookieBuilder.removeCookie(response, Constants.LOGIN_PWD);
             }
             // 账号没问题
             session.setAttribute(Constants.SESSION_USER, user);
@@ -100,14 +93,10 @@ public class UserController {
     }
 
     @RequestMapping("/exit.do")
-    public String exit(HttpServletRequest request, HttpSession session) {
+    public String exit(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         Cookie[] cookies = request.getCookies();
-        Arrays.stream(cookies).forEach(cookie -> cookie.setMaxAge(0));
-        Enumeration<String> attrs = session.getAttributeNames();
-        while (attrs.hasMoreElements()) {
-            String attr = attrs.nextElement();
-            session.setAttribute(attr, null);
-        }
-        return "settings/qx/user/login";
+        Arrays.stream(cookies).forEach(cookie -> CookieBuilder.removeCookie(response, cookie.getName()));
+        session.invalidate();
+        return "redirect:/";
     }
 }
