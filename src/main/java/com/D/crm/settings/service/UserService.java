@@ -18,4 +18,6 @@ public interface UserService {
     User login(Map<String, Object> map);
 
     Pair<Boolean, String> checkUser(User user, String ip);
+
+    User getUserById(String id);
 }

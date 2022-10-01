@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +74,12 @@ public class UserServiceImpl implements UserService {
             LoggerUtils.logInfo("账号 " + user.getLoginAct() + " 不允许 IP 为" + ip + " 的用户访问");
             return new Pair<>(false, "该 IP 禁止访问");
         }
-        LoggerUtils.logInfo("账号 " + user.getLoginAct() + "登录成功");
+        LoggerUtils.logInfo("账号 " + user.getLoginAct() + " 校验成功");
         return new Pair<>(true, null);
+    }
+
+    @Override
+    public User getUserById(String id) {
+        return userMapper.selectByPrimaryKey(id);
     }
 }

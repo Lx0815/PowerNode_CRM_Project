@@ -1,7 +1,9 @@
 package com.D.crm.workbench.web.controller;
 
+import com.D.crm.settings.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * @author: Ding
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class WorkbenchIndexController {
 
-    @RequestMapping("/workbench/index.do")
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/workbench/index.do")
     public String toIndex() {
         return "workbench/index";
     }
