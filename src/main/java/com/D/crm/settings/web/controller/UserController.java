@@ -19,10 +19,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author: Ding
@@ -77,7 +74,7 @@ public class UserController {
                 Cookie actCookie = CookieBuilder.createCookie(Constants.LOGIN_ACT, loginAct, true)
                         .setMaxAge(Constants.TEN_DAY)
                         .getCookie();
-                Cookie pwdCookie = CookieBuilder.createCookie(Constants.LOGIN_PWD, loginPwd, true)
+                Cookie pwdCookie = CookieBuilder.createCookie(Constants.LOGIN_PWD, Base64Utils.decode(loginPwd), true)
                         .setMaxAge(Constants.TEN_DAY)
                         .getCookie();
 
@@ -101,5 +98,16 @@ public class UserController {
             return new ResponseObj(ResponseCode.FAIL_CODE, result.getValue());
         }
     }
-}
 
+    @RequestMapping("/exit.do")
+    public String exit(HttpServletRequest request, HttpSession session) {
+        Cookie[] cookies = request.getCookies();
+        Arrays.stream(cookies).forEach(cookie -> cookie.setMaxAge(0));
+        Enumeration<String> attrs = session.getAttributeNames();
+        while (attrs.hasMoreElements()) {
+            String attr = attrs.nextElement();
+            session.setAttribute(attr, null);
+        }
+        return "settings/qx/user/login";
+    }
+}
